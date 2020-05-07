@@ -8,6 +8,7 @@ from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense, Dropout, Activation, Flatten 
 from tensorflow.python.keras.layers import Conv2D, MaxPooling2D 
 import serial
+from playsound import playsound
 controlData = serial.Serial('COM4',9600)
 #sửa lại nếu cổng kết nói board arduino khác com4
 
@@ -89,8 +90,8 @@ while True:
         #namedWindow("cam-test",CV_WINDOW_AUTOSIZE)
         #imshow("cam-test",test_image)
         #cv2.imshow('test',test_image);
-        waitKey(0)
-        destroyWindow("cam-test")
+        #waitKey(0)
+        #destroyWindow("cam-test")
         #test_image=cv2.resize(test_image,(128,128))
         #imwrite("test/test.jpg",test_image) #save image
         # waitKey(30);
@@ -112,8 +113,8 @@ while True:
         for dataset in data_dir_list:
           #print(dataset)
           if labels_name[dataset]==model.predict_classes(test_image)[0]:
-            
             print("Day la:"+dataset)
+            playsound('./mp3/'+ dataset + '.mp3')
             break
         if value == 1:
             servo_quay_trai()
@@ -123,6 +124,6 @@ while True:
             servo_tro_lai()
         
         #plt.imshow(test_image.reshape(128,128), cmap="gray")
-        waitKey(0)
-        break
-        waitKey(3000)
+        waitKey(1500)  
+        destroyWindow("cam-test");
+        waitKey(1500)
