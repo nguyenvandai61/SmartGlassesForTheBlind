@@ -18,7 +18,7 @@ def save_image(image, value):
         global idxs
         filename = dirr+"newdata/"+direction+"/"+str(idxs[value])+".jpg"
         idxs[value]+=1
-        cv2.imwrite(filename, image)
+        cv2.imwrite(filename, image)       
 dirr = "Downloads/DA/"
 models_dirr = dirr + "models/"
 sounds_dirr = dirr + "sounds/"
@@ -47,7 +47,15 @@ camera.resolution = (720, 480)
 camera.framerate = 30
 
 idxs = [0, 0, 0]
+# Quay servo de bao san sang
+Servos.rotate(0)
+
+# Phat am thanh de bao san sang
+soundfile = sounds_dirr + 'ready.mp3'
+playSound(soundfile)
+
 print("Press Button!!")
+
     
 while True:
     # Neu button dang nhan
@@ -63,7 +71,6 @@ while True:
             # 15 frame lay 1 frame xu ly
             if (i%10 == 0):
                 test_image = rawCapture.array
-                
                 # Xu ly anh
                 start_time1 = time.time()
                 test_image2 = test_image;
@@ -89,11 +96,12 @@ while True:
                 
                 # Hien thi text tren video
                 camera.annotate_text = direction + " "+  str(DetectWay.predict(test_image)[value])
-                # Quay servos
-                Servos.rotate(value)
+                
                 # Phat qua tai nghe
                 soundfile = sounds_dirr + direction + '.mp3'
                 playSound(soundfile)
+                # Quay servos
+                Servos.rotate(value)
 
                 # Xu ly nhan dien vat the
                 start_time2 = time.time()
@@ -102,26 +110,33 @@ while True:
                 # Cho ket qua du doan
                 confidence = 0.8
                 DetectObject.predict(detect, confidence)
+                DetectObject.drawOnImage(frame, detect, confidence)
                 DetectObject.drawCamera(camera, detect, confidence)
                 finish_time2 = time.time()
                 print("Total detectobj-time: %f s", finish_time2 - start_time2)                
                 
+                cv2.imshow("File", frame)
 
                 # Luu anh
                 save_image(test_image2, value)
                 
                 process_time = finish_time2 - start_time1
-                i += int(process_time*30)
                 
+                i += int(process_time*30)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                        break
                 
             i = i + 1
-            if i>1500:
-                    
-                
+            #if i>3600:
+            if Button.isPressed():
+                # Phat qua tai nghe
+                soundfile = sounds_dirr + 'quit.mp3'
+                playSound(soundfile)
+                             
                 camera.stop_recording()
                 camera.stop_preview()
                 
-                server_socket.close()
+                time.sleep(4)
                 exit()
             rawCapture.truncate(0)
 
