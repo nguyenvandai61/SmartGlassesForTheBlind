@@ -29,7 +29,7 @@ Sử dụng mô hình Convolution Neural Network(CNN) trong Deep Learning với 
 ## Kết quả đạt được
 
 ![alt](./screenshots/KQ1.png)
-![alt](./screenshots/KQ2.jpg)
+![alt](./screenshots/KQ2.JPG)
 
 ## Tài liệu tham khảo
 - [0] DeepWay helps the visually impaired navigate with a tap, Arduino team, 2018
